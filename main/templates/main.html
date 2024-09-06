@@ -1,0 +1,193 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Celestia</title>
+        <link rel="icon" href="{% static 'assets\logo\Logo.svg' %}" type="image/x-icon">
+        <style>
+            body{
+                background-color: #1d2736;
+                color: white;
+                margin: 0;
+            }
+
+            .main{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: start;
+                margin: 15px auto;
+                padding: 30px;
+            }
+            .main img {
+                justify-content: center;
+                align-items: center;
+                justify-items: center;
+                width: 100%;
+                max-width: 375px;
+                height: auto;
+            }
+
+            .data {
+                display: flex;
+                margin-left: 50px;
+                flex-direction: column;
+                justify-content: center;
+                align-items: left;
+                max-width: 600px;
+            }
+            .data p {
+                font-family: 'Poppins', helvetica;
+                font-size: 16px;
+                margin: 0;
+            }
+            .data .row {
+                display: flex;
+                align-items: center;
+                margin-bottom: 12px;
+                margin-top: 12px;
+            }
+            .data .name {
+                font-size: 24px; 
+                margin-bottom: 25px;
+            }
+            .data .price {
+                font-size: 18px;
+                margin-bottom: 30px;
+                color: rgb(137, 209, 150);
+            }
+            .data .description {
+                font-size: 14px;
+                margin-bottom: 30px;
+            }
+            .data .label {
+                font-family: 'Poppins', helvetica;
+                font-size: 14px;
+                margin-right: 10px;
+                width: 120px; /* Adjust this as needed */
+            }
+            .data .tag {
+                background-color: #e1e7f6;
+                color: black;
+                font-family: 'Poppins', monospace;
+                border-radius: 20px;
+                padding: 5px 15px;
+                font-size: 10px;
+                display: inline-block;
+            }
+
+            .app-bar{
+                padding: 15px 25px;
+                margin-bottom: 25px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .app-bar img {
+                width: 100%;
+                max-width: 120px;
+            }
+            .app-bar p {
+                font-family: 'Poppins', helvetica;
+                font-size: 14px;
+            }
+
+            footer {
+                font-family: 'Poppins', helvetica;
+                font-size: 12px;
+                text-align: center;
+                padding: 2px 10px;
+                background-color: #171e2a;
+                color: #fff;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+
+            /* Responsive (ga guna amat sih ya) */
+            @media (max-width: 768px) {
+                .main{
+                    flex-direction: column;
+                    align-self: center;
+                    display: flex;
+                    margin: 15px auto;
+                    padding: 30px;
+                }
+                .main img {
+                    width: 100%;
+                    max-width: 700px;
+                    height: auto;
+                }
+
+                .data {
+                    margin-left: 0;
+                    margin-top: 40px;
+                    width: 100%;
+                }
+
+                footer{
+                    position: relative;
+                    width: auto;
+                }
+            }
+            @media (max-width: 450px) {
+                .app-bar img {
+                    width: 100%;
+                    max-width: 90px;
+                }
+                .app-bar p {
+                    font-size: 12px;
+                }
+
+                .data .label {
+                    font-size: 12px;
+                    width: 100px;
+                }
+                .data .tag {
+                    font-size: 8px;
+                }
+                .data .name {
+                    font-size: 18px;
+                }
+                .data .price {
+                    font-size: 14px;
+                }
+                .data .description {
+                    font-size: 12px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="app-bar">
+            <img src="{% static 'assets\logo\Horizontal.png' %}" alt="Logo">
+            <p> Product Preview </p>
+        </div>
+        <div class="main">
+            <img src="{% static 'assets\dev\Test.jpeg' %}" alt="Product Image - {{name}}">
+            <div class="data">
+                <p class="name">{{ name }}</p>
+                <p class="price">IDR {{ price_with_comma }}</p>
+                <p class="description">{{ description }}</p>
+                <div class="row">
+                    <span class="label">Character</span>
+                    <span class="tag">{{ chara }}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Game</span>
+                    <span class="tag">{{ game }}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Category</span>
+                    <span class="tag">{{ category }}</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made by Daniel Liman - 2306220753 - PBP F</p>
+        </footer>
+    </body>
+</html>
