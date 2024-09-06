@@ -1,6 +1,6 @@
 <a id="readme-top"></a>
 
-# <p align="center"><img src="assets\logo\Horizontal.png"   style="width: 100%; max-width: 350px;" alt="Celestia"></p>
+# <p align="center"><img src="assets\logo\Horizontal.png"   style="width: 100%; max-width: 150px;" alt="Celestia"></p>
 
 Celestia is a Hoyoverse Official Merchandise E-Commerce that offers a wide range of products related by some games that Hoyoverse made. This Project was made for one of the task in [Pemrograman Berbasis Platform (PBP) Gasal 2024/2025](https://pbp-fasilkom-ui.github.io/ganjil-2025/).
 
