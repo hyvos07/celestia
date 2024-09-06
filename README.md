@@ -1,12 +1,14 @@
 <a id="readme-top"></a>
 
-# <p align="center"><img src="assets\logo\Horizontal.png"   style="width: 100%; max-width: 350px;" alt="Celestia"></p>
-
+<p align="center"><img src="assets\logo\Horizontal.png" style="max-width: 350px;" alt="Celestia"></p>
+<hr>
 Celestia is a Hoyoverse Official Merchandise E-Commerce that offers a wide range of products related by some games that Hoyoverse made. This Project was made for one of the task in [Pemrograman Berbasis Platform (PBP) Gasal 2024/2025](https://pbp-fasilkom-ui.github.io/ganjil-2025/).
+
+<br>
+<br>
 
 > **Note:** <br> This is not an actual online shop for Hoyoverse Merchandise.
 
-<br>
 <br>
 
 # ⚙️ Deployment and Usage
@@ -15,13 +17,13 @@ This project is deployed on PWS (Pacil Web Service) and can be accessed [here](h
 If you want to try and run the project from your local device, open http://127.0.0.1:8000 or http://localhost:8000 with your browser to see the result.
 
 <br>
-<br>
 
 # 📝 Assignment
 **Nama**    : Daniel Liman <br>
 **NPM**     : 2306220753 <br>
 **Kelas**   : PBP F
-<p style="font-size: 1px;"> &nbsp; </p> <!-- maaf MD gaada padding nya sih ;-; -->
+<br>
+<br>
 
 ## Tugas 2
 ### Step by Step Pembuatan Project Django
