@@ -11,7 +11,7 @@ Celestia is a Hoyoverse Official Merchandise E-Commerce that offers a wide range
 <br>
 
 # ⚙️ Deployment and Usage
-This project is deployed on PWS (Pacil Web Service) and can be accessed [here](http://pwsbroken.com).
+This project is deployed on PWS (Pacil Web Service) and can be accessed [here](http://daniel-liman-celestia.pbp.cs.ui.ac.id/).
 
 If you want to try and run the project from your local device, open http://127.0.0.1:8000 or http://localhost:8000 with your browser to see the result.
 
