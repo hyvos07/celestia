@@ -26,8 +26,6 @@ If you want to try and run the project from your local device, open http://127.0
 <br>
 <br>
 
-<div align="justify">
-
 ## Tugas 2
 ### Step by Step Pembuatan Project Django
 1. Membuat direktori baru bernama `celestia` dan inisiasi local repository di folder tersebut.
@@ -115,5 +113,3 @@ Django cocok digunakan sebagai *framework* pertama yang kami pelajari dalam pemb
 ### Mengapa model pada Django disebut sebagai ORM?
 
 Model data pada Django disebut sebagai ORM atau *Object-Relational Mapping* karena Django memungkinkan *developer* untuk berinteraksi dan mengelola data yang ada pada *database* dalam bentuk objek-objek yang ada di Python. *Developer* atau pengembang yang memakai *framework* Django dapat membuat, membaca, merubah, maupun menghapus data (*Create, Read, Update, and Delete*) yang ada di dalam *database* dengan menggunakan objek-objek dari Python, sehingga tidak perlu menggunakan *query* SQL secara langsung.
-
-</div>
