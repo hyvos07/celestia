@@ -93,16 +93,13 @@ If you want to try and run the project from your local device, open http://127.0
 
 Dalam proses pengembangan perangkat lunak, `git` memiliki banyak kegunaan pada aspek-aspek yang melibatkan kolaborasi antar sesama *developer* dan pengelolaan dari proyek *software application* tersebut. Aspek-aspek tersebut dapat dijabarkan sebagai berikut.
 
-1. ***Version Control***
-<br>
+1. ***Version Control*** <br>
 `git` dapat menyimpan perubahan kode dari suatu proyek secara rinci. Setiap kali ada perubahan pada kode, seorang *developer* dapat mencatatnya di `git` sebagai sebuah ***commit***, sehingga *developer* tersebut maupun rekannya dapat mengetahui detail dari siapa, kapan, dan alasan perubahan kode tersebut. Pencatatan dalam bentuk *commit* ini juga mempermudah proses *rollback* ke versi sebelumnya jika ada masalah yang terjadi pada kode sekarang.
 
-2. **Kolaborasi (*Branching and Merging*)**
-<br>
+2. **Kolaborasi (*Branching and Merging*)** <br>
 `git` memiliki sistem percabangan yang dapat memisahkan kode untuk fitur baru, perbaikan bug, dan lainnya. Setiap *developer* yang terlibat dalam proyek dapat membuat cabang atau *branch* baru untuk pekerjaan mereka masing-masing, seperti mengembangkan fitur baru atau memperbaiki bug **tanpa mengganggu kode utamanya**. Setelah kode mereka sudah siap, *branch* tersebut dapat digabungkan kembali ke kode utama dengan *merge* dan *pull request*.
 
-3. ***Anytime and Anywhere Development***
-<br>
+3. ***Anytime and Anywhere Development*** <br>
 Proyek yang menggunakan `git` dapat diinisiasi sebagai *repository* lokal dan disinkronkan dengan *remote repository* seperti GitHub atau GitLab. Hal ini memungkinkan *developer* dan rekannya untuk mengakses, mengubah, dan mengunggah perubahan pada kode dari berbagai lokasi dan *workspace* yang mereka miliki, selama terhubung dengan *remote repository* yang sama.
 
 ### Kenapa Django dijadikan *framework* yang pertama kali kami pelajari?
