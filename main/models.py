@@ -4,6 +4,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.IntegerField()
     description = models.TextField()
+    stock = models.IntegerField()
     chara = models.CharField(max_length=255)
     game = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
@@ -23,6 +24,10 @@ class Product(models.Model):
     @property
     def price_with_comma(self):
         return "{:,}".format(self.price)
+    
+    @property
+    def is_stock_empty(self):
+        return self.stock == 0
 
     def __str__(self):
         return self.name
