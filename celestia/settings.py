@@ -118,10 +118,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 
-# Add a directory where static files will be saved
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+# Add a directory where static files will be collected
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
