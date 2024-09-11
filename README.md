@@ -18,8 +18,8 @@ If you want to try and run the project from your local device, open http://127.0
 <br>
 
 # 📝 Assignment
-**Nama**    : Daniel Liman <br>
-**NPM**     : 2306220753 <br>
+**Nama**    : Daniel Liman<br>
+**NPM**     : 2306220753<br>
 **Kelas**   : PBP F
 <br>
 <br>
