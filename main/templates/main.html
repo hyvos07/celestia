@@ -9,7 +9,10 @@
 {% block content %}
 <div class="app-bar">
     <img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo">
-    <p> Product Preview </p>
+    <div class="options">
+        <a href="{% url 'main:create_product' %}">Add New Item</a>
+        <a href="{% url 'admin:index' %}" target="_blank">Login</a>
+    </div>
 </div>
 <div class="main">
     <img src="{% static 'assets/dev/Test.jpeg' %}" alt="Product Image - {{name}}">
@@ -60,12 +63,6 @@
     {% endfor %}
     </table>
 {% endif %}
-
-<br>
-
-<a href="{% url 'main:create_product' %}">
-<button>Add New Product</button>
-</a>
 
 <footer>
     <p>Made by Daniel Liman - 2306220753 - PBP F</p>

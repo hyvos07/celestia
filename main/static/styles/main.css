@@ -1,8 +1,26 @@
+/* HTML tag */
 body{
     background-color: #1d2736;
     color: white;
     margin: 0;
 }
+
+footer {
+    font-family: 'Poppins', helvetica;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 10px;
+    margin-top: 150px;
+    background-color: #171e2a;
+    color: #fff;
+    position: relative;
+    width: auto;
+    bottom: 0;
+}
+
+
+/* Main body */
 .main{
     display: flex;
     flex-direction: row;
@@ -12,6 +30,7 @@ body{
     margin-bottom: 50px;
     padding: 30px;
 }
+
 .main img {
     justify-content: center;
     align-items: center;
@@ -21,6 +40,8 @@ body{
     height: auto;
 }
 
+
+/* Data tag */
 .data {
     display: flex;
     margin-left: 50px;
@@ -72,9 +93,13 @@ body{
     display: inline-block;
 }
 
+
+/* App bar */
 .app-bar{
-    padding: 15px 25px;
-    margin-bottom: 25px;
+    padding: 15px 35px;
+    position: sticky;
+    top: 0;
+    background-color: #171e2a;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -83,28 +108,30 @@ body{
     width: 100%;
     max-width: 120px;
 }
-.app-bar p {
+.app-bar .options {
+    padding: 10px 0px;
     font-family: 'Poppins', helvetica;
     font-weight: 600;
     font-size: 14px;
 }
-
-footer {
-    font-family: 'Poppins', helvetica;
-    font-weight: 600;
-    font-size: 12px;
-    text-align: center;
-    padding: 8px 10px;
-    margin-top: 150px;
-    background-color: #171e2a;
-    color: #fff;
-    position: relative;
-    width: auto;
-    bottom: 0;
+.app-bar .options a {
+    padding: 0px 25px;
+    color: white;
+    text-decoration: none;
 }
+.app-bar .options a:hover {
+    text-decoration: underline;
+}
+
+
 
 /* Responsive (ga guna amat sih ya) */
 @media (max-width: 768px) {
+    footer {
+        margin-top: 80px;
+        padding: 6px 10px;
+    }
+        
     .main{
         flex-direction: column;
         align-self: center;
@@ -124,12 +151,23 @@ footer {
         width: 100%;
     }
 
-    footer {
-        margin-top: 80px;
-        padding: 6px 10px;
+    .app-bar img {
+        width: 100%;
+        max-width: 110px;
+    }
+
+    .app-bar .options a {
+        padding: 0px 0px 0px 35px;
+        font-size: 13px;
     }
 }
+
 @media (max-width: 450px) {
+    footer {
+        font-size: 10px;
+        margin-top: 40px;
+    }
+
     .app-bar img {
         width: 100%;
         max-width: 90px;
@@ -154,9 +192,8 @@ footer {
     .data .description {
         font-size: 12px;
     }
-    
-    footer {
+
+    .app-bar .options a {
         font-size: 10px;
-        margin-top: 40px;
     }
 }
