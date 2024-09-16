@@ -21,7 +21,110 @@ If you want to try and run the project from your local device, open http://127.0
 **Nama**    : Daniel Liman<br>
 **NPM**     : 2306220753<br>
 **Kelas**   : PBP F
-<br>
+
+| [Tugas 2](#tugas-2) | [Tugas 3](#tugas-3) |
+|-|-|
+
+
+## Tugas 3
+### Implementasi Form dan Data Delivery di Project ini
+1. Membuat input `form` dalam `forms.py` untuk menambahkan produk baru pada app `main`.
+    ```python
+    class ProductForm(ModelForm):
+        class Meta:
+            model = Product
+            fields = [
+                'name',
+                'price',
+                'description',
+                'stock',
+                'chara',
+                'game',
+                'category',
+                'image',
+            ]
+    ```
+    Form tersebut ditampilkan dalam bentuk HTML yang tersimpan di *templates* `create_product.html`. HTML tersebut diolah dan dikirim kembali ke user lewat fungsi `create_product()` di dalam `views.py`.
+    ```python
+    def create_product(request):
+        form = ProductForm(request.POST or None)
+
+        if form.is_valid() and request.method == "POST":
+            form.save()
+            return redirect('main:show_main')
+
+        context = {'form': form}
+        return render(request, "create_product.html", context)
+    ```
+
+2. Menambahkan 4 fungsi baru di `views.py` untuk melihat produk yang sudah ditambahkan dalam berbagai bentuk dan opsi, yaitu:
+    - `show_xml()` --> Semua produk dengan tampilan XML
+        ```python
+        # Show all products in XML format
+        def show_xml(request):
+            data = Product.objects.all()
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+        ```
+    - `show_json()` --> Semua produk dengan tampilan JSON
+        ```python
+        # Show all products in JSON format
+        def show_json(request):
+            data = Product.objects.all()
+            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+        ```
+    - `show_xml_by_id()` --> Tampilan XML dengan ID khusus
+        ```python
+        # Show a product filtered based on its ID in XML
+        def show_xml_by_id(request, id):
+            data = Product.objects.filter(pk=id)
+            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+        ```
+    - `show_json_by_id()` --> Tampilan JSON dengan ID khusus
+        ```python
+        # Show a product filtered based on its ID in JSON
+        def show_json_by_id(request, id):
+            data = Product.objects.filter(pk=id)
+            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+        ```
+
+3. Menambahkan routing URL untuk setiap *views* baru pada `main/urls.py` sehingga dapat diakses.
+    ```python
+    ···
+    path('create-product', create_product, name='create_product'),
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+    ···
+    ```
+
+### Mengapa sebuah platform perlu memiliki sebuah *data delivery*?
+Sebuah platform perlu memiliki sebuah sistem *data delivery* untuk memastikan bahwa data dapat dikirim, diterima, dan diakses secara efisien dan efektif dari berbagai sistem atau pengguna. *Data delivery* yang baik juga sangat berguna untuk: 
+1. Menjaga sinkronisasi antara data yang berbeda di berbagai pihak dan perangkat, sehingga pengguna dapat mengakses platform kita dari mana saja, baik situs web maupun aplikasi.
+2. *Data delivery* mendukung kinerja dari platform kita dalam mengolah permintaan data secara *real-time*. Data yang dapat diakses dan diubah secara langsung membuat platform yang kita miliki lebih responsif dan interaktif dari sisi pengguna.
+3. Sistem *data delivery* yang baik juga bisa membantuk kita dan pengguna dalam memastikan integritas dan keamanan selama berjalannya proses pertukaran data. Pencurian data selama proses mengakses dan tukar-menukar data antar pihak dapat dihindari lewat keamanan dan proteksi yang dimiliki oleh platform kita.
+
+### XML vs JSON
+Menurut saya pribadi, JSON lebih ringan dan mudah untuk diidentifikasi dan dibaca dibandingkan oleh XML. JSON memakai format `key:value` yang biasa kita gunakan di bahasa pemrograman yang kita kenal, seperti struktur data `Map` pada Java dan `dict` pada Python. Kemiripan struktur ini yang juga membuat JSON lebih mudah dikirim ke pihak lain maupun dikonversi dan diolah menjadi sebuah objek data pada platform kita.
+
+JSON juga memiliki ukuran yang lebih ringan daripada XML, karena strukturnya yang lebih ringkas daripada XML. Ukuran yang lebih kecil juga memengaruhi kecepatan transfer data, sehingga lebih cocok digunakan oleh platform yang sudah memiliki nama yang besar. Hal tersebut membuat format JSON lebih populer dibandingkan dengan XML yang memakai *tag* pembuka dan penutup untuk setiap elemennya.
+
+### Apakah fungsi dari `is_valid()` pada form Django?
+Method `is_valid()` berfungsi untuk proses validasi data yang akan dimasukkan pengguna platform kita ke dalam *form*. Method ini akan memeriksa *input* dari pengguna jika data yang akan dikirim sesuai dengan apa yang kita tentukan sebelumnya. Jika *input* tersebut valid, maka *method* ini akan mengembalikan `True`. Jika data tidak valid, *method* ini mengembalikan `False`. Kita dapat memanfaatkan *value* yang dikeluarkan dari *method* ini untuk menentukan langkah selanjutnya, seperti mengeluarkan pesan error yang bersangkutan atau langsung memproses data yang dimasukkan pengguna ke platform kita (seperti memasukkan data ke *database* atau lainnya).
+
+Tanpa *method* `is_valid()`, kita akan kesulitan dalam memvalidasi data yang akan masuk ke dalam platform kita. Adanya validasi dari *input* pengguna dapat menjamin integritas dan keamanan dari data yang platform kita miliki. *Input-input* nakal dari pengguna yang tidak bertanggungjawab bisa kita hindari dengan `method` ini.
+
+### Mengapa kita membutuhkan `csrf_token` saat membuat form di Django?
+CSRF (*Cross-Site Request Forgery*) token adalah salah satu komponen yang krusial dalam membuat *form* di platform Django kita. CSRF token berfungsi untuk memvalidasi *request* yang dikirim pengguna dan melindungi platform kita dari serangan CSRF. 
+
+Serangan CSRF adalah sebuah serangan siber dimana seseorang mencoba untuk memanipulasi akses ke platform kita lewat akses autentikasi yang sudah mereka dapat sebelumnya. Karena autentikasi yang mereka sudah dapatkan valid (bukan palsu), aplikasi/platform yang kita miliki biasanya tidak akan membatasi akses dari pengguna nakal tersebut. Hal ini memungkinkan seseorang untuk mengeksploitasi akses-akses dan perintah-perintah yang dapat dilakukan dengan bermodal kepercayaan yang sudah platform kita percayai kepada mereka.
+
+Token CSRF yang ada di Django ini akan memverifikasi bahwa *request* POST yang diterima benar-benar berasal dari *input form* yang valid di platform kita, bukan dari tempat lainnya. CSRF token bersifat unik untuk setiap sesi pengguna, sehingga membuatnya menjadi lapisan keamanan tambahan yang efektif.
+
+### Pengaksesan Data pada Postman
+![SS Bukti]()
+
+
 <br>
 
 ## Tugas 2
