@@ -6,7 +6,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.IntegerField()
     description = models.TextField()
-    stock = models.IntegerField()
+    stock = models.IntegerField(default=1)
     chara = models.CharField(max_length=255)
     game = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
