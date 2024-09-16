@@ -122,7 +122,15 @@ Serangan CSRF adalah sebuah serangan siber dimana seseorang mencoba untuk memani
 Token CSRF yang ada di Django ini akan memverifikasi bahwa *request* POST yang diterima benar-benar berasal dari *input form* yang valid di platform kita, bukan dari tempat lainnya. CSRF token bersifat unik untuk setiap sesi pengguna, sehingga membuatnya menjadi lapisan keamanan tambahan yang efektif.
 
 ### Pengaksesan Data pada Postman
-![SS Bukti]()
+
+#### 1. All Products in XML
+![SS Bukti](assets/assignment/Get%20All%20XML.png)
+#### 2. All Products in JSON
+![SS Bukti](assets/assignment/Get%20All%20JSON.png)
+#### 3. Product by ID in XML
+![SS Bukti](assets/assignment/Get%20by%20ID%20XML.png)
+#### 4. Product by ID in JSON
+![SS Bukti](assets/assignment/Get%20by%20ID%20JSON.png)
 
 
 <br>
