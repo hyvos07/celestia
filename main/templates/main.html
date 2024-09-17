@@ -4,65 +4,65 @@
 {% block meta %}
 <title>Celestia</title>
 <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+<style>
+    /* Background Image (css file can't access Django static file) */
+    .background-image {
+        height: 70vh;
+        background-image: url("{% static 'assets/templates/Background.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: brightness(0.6);
+        z-index: -1;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<div class="app-bar">
+<nav class="app-bar">
     <img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo">
     <div class="options">
+        <a href="{% url 'main:show_main' %}">Home</a>
         <a href="{% url 'main:create_product' %}">Add New Item</a>
-        <a href="{% url 'admin:index' %}" target="_blank">Login</a>
     </div>
-</div>
-<div class="main">
-    <img src="{% static 'assets/dev/Test.jpeg' %}" alt="Product Image - {{name}}">
-    <div class="data">
-        <p class="name">{{ name }}</p>
-        <p class="price">IDR {{ price_with_comma }}</p>
-        <p class="description">{{ description }}</p>
-        <div class="row">
-            <span class="label">Character</span>
-            <span class="tag">{{ chara }}</span>
-        </div>
-        <div class="row">
-            <span class="label">Game</span>
-            <span class="tag">{{ game }}</span>
-        </div>
-        <div class="row">
-            <span class="label">Category</span>
-            <span class="tag">{{ category }}</span>
-        </div>
-    </div>
-</div>
-{% if not all_products %}
-    <p>Belum ada produk lainnya.</p>
-{% else %}
-    <table>
-    <tr>
-        <th>Nama Produk</th>
-        <th>Harga</th>
-        <th>Deskripsi</th>
-        <th>Stok</th>
-        <th>Chara</th>
-        <th>Game</th>
-        <th>Category</th>
-        <th>Image</th>
-    </tr>
+</nav>
 
-    {% for product in all_products %}
-    <tr>
-        <td>{{product.name}}</td>
-        <td>{{product.price_with_comma}}</td>
-        <td>{{product.description}}</td>
-        <td>{{product.stock}}</td>
-        <td>{{product.chara}}</td>
-        <td>{{product.game}}</td>
-        <td>{{product.category}}</td>
-        <td>{{product.image}}</td>
-    </tr>
-    {% endfor %}
-    </table>
-{% endif %}
+<div class="background-image"></div>
+
+<div class="main">
+    <p> Our Products </p>
+    {% if not all_products %}
+        <p class="not-found">Belum ada produk yang tersimpan!</p>
+    {% else %}
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Nama Produk</th>
+                <th>Harga</th>
+                <th>Deskripsi</th>
+                <th>Stok</th>
+                <th>Chara</th>
+                <th>Game</th>
+                <th>Category</th>
+                <th>Image</th>
+            </tr>
+
+            {% for product in all_products %}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.price_with_comma}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.stock}}</td>
+                <td>{{product.chara}}</td>
+                <td>{{product.game}}</td>
+                <td>{{product.category}}</td>
+                <td><img src="{{product.image}}" width="100"></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+</div>
 
 <footer>
     <p>Made by Daniel Liman - 2306220753 - PBP F</p>
