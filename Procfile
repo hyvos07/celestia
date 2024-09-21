@@ -1,1 +1,1 @@
-web: ./pws.sh
+release: python manage.py collectstatic --noinput
