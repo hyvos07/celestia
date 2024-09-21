@@ -135,7 +135,7 @@ Pada inisiasi *Foreign Key* di atas, terdapat pula parameter `on_delete` yang di
     ```
     Sistem bawaan yang dimiliki oleh Django untuk mengautentikasi *user* yang akan *login* berasal dari *method* `AuthenticationForm()`. *Method* tersebut dapat diproses otomatis oleh Django menjadi *form login* dengan menambahkan `{{ form.as_table }}` pada *template* HTML yang bersangkutan. Saat *user* berhasil *login*, Django akan membuat entri *session* di *database* (menggunakan *middleware session*), dan mengaitkannya dengan ID dari *user* yang terautentikasi.
 
-2. *Authorization*
+- ***Authorization***
 
     Berbeda dengan autentikasi, *authorization* atau otorisasi adalah sebuah proses **memverifikasi hak akses *user* terhadap sumber daya atau tindakan tertentu**. Django akan menentukan apa saja aktivitas yang diizinkan untuk dilakukan oleh *user* tersebut setelah mereka berhasil terautentikasi. Seorang *user* yang sudah login dapat memiliki akses ke dashboard *admin*, sementara *user* lain mungkin hanya bisa mengakses halaman biasa saja. *User* yang memiliki hak sebagai *admin* dapat mengakses panel *admin*, sementara *user* biasa hanya dapat mengakses profilnya sendiri.
 
