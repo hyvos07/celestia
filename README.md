@@ -22,214 +22,157 @@ If you want to try and run the project from your local device, open http://127.0
 **NPM**     : 2306220753<br>
 **Kelas**   : PBP F
 
-| [Tugas 2](#tugas-2) | [Tugas 3](#tugas-3) |
-|-|-|
-
-
-## Tugas 3
-### Implementasi Form dan Data Delivery di Project ini
-1. Membuat input `form` dalam `forms.py` untuk menambahkan produk baru pada app `main`.
-    ```python
-    class ProductForm(ModelForm):
-        class Meta:
-            model = Product
-            fields = [
-                'name',
-                'price',
-                'description',
-                'stock',
-                'chara',
-                'game',
-                'category',
-                'image',
-            ]
-    ```
-    Form tersebut ditampilkan dalam bentuk HTML yang tersimpan di *templates* `create_product.html`. HTML tersebut diolah dan dikirim kembali ke user lewat fungsi `create_product()` di dalam `views.py`.
-    ```python
-    def create_product(request):
-        form = ProductForm(request.POST or None)
-
-        if form.is_valid() and request.method == "POST":
-            form.save()
-            return redirect('main:show_main')
-
-        context = {'form': form}
-        return render(request, "create_product.html", context)
-    ```
-
-2. Menambahkan 4 fungsi baru di `views.py` untuk melihat produk yang sudah ditambahkan dalam berbagai bentuk dan opsi, yaitu:
-    - `show_xml()` --> Semua produk dengan tampilan XML
-        ```python
-        # Show all products in XML format
-        def show_xml(request):
-            data = Product.objects.all()
-            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-        ```
-    - `show_json()` --> Semua produk dengan tampilan JSON
-        ```python
-        # Show all products in JSON format
-        def show_json(request):
-            data = Product.objects.all()
-            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-        ```
-    - `show_xml_by_id()` --> Tampilan XML dengan ID khusus
-        ```python
-        # Show a product filtered based on its ID in XML
-        def show_xml_by_id(request, id):
-            data = Product.objects.filter(pk=id)
-            return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-        ```
-    - `show_json_by_id()` --> Tampilan JSON dengan ID khusus
-        ```python
-        # Show a product filtered based on its ID in JSON
-        def show_json_by_id(request, id):
-            data = Product.objects.filter(pk=id)
-            return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-        ```
-
-3. Menambahkan routing URL untuk setiap *views* baru pada `main/urls.py` sehingga dapat diakses.
-    ```python
-    ···
-    path('create-product', create_product, name='create_product'),
-    path('xml/', show_xml, name='show_xml'),
-    path('json/', show_json, name='show_json'),
-    path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
-    path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
-    ···
-    ```
-
-### Mengapa sebuah platform perlu memiliki sebuah *data delivery*?
-Sebuah platform perlu memiliki sebuah sistem *data delivery* untuk memastikan bahwa data dapat dikirim, diterima, dan diakses secara efisien dan efektif dari berbagai sistem atau pengguna. *Data delivery* yang baik juga sangat berguna untuk: 
-1. Menjaga sinkronisasi antara data yang berbeda di berbagai pihak dan perangkat, sehingga pengguna dapat mengakses platform kita dari mana saja, baik situs web maupun aplikasi.
-2. *Data delivery* mendukung kinerja dari platform kita dalam mengolah permintaan data secara *real-time*. Data yang dapat diakses dan diubah secara langsung membuat platform yang kita miliki lebih responsif dan interaktif dari sisi pengguna.
-3. Sistem *data delivery* yang baik juga bisa membantuk kita dan pengguna dalam memastikan integritas dan keamanan selama berjalannya proses pertukaran data. Pencurian data selama proses mengakses dan tukar-menukar data antar pihak dapat dihindari lewat keamanan dan proteksi yang dimiliki oleh platform kita.
-
-### XML vs JSON
-Menurut saya pribadi, JSON lebih ringan dan mudah untuk diidentifikasi dan dibaca dibandingkan oleh XML. JSON memakai format `key:value` yang biasa kita gunakan di bahasa pemrograman yang kita kenal, seperti struktur data `Map` pada Java dan `dict` pada Python. Kemiripan struktur ini yang juga membuat JSON lebih mudah dikirim ke pihak lain maupun dikonversi dan diolah menjadi sebuah objek data pada platform kita.
-
-JSON juga memiliki ukuran yang lebih ringan daripada XML, karena strukturnya yang lebih ringkas daripada XML. Ukuran yang lebih kecil juga memengaruhi kecepatan transfer data, sehingga lebih cocok digunakan oleh platform yang sudah memiliki nama yang besar. Hal tersebut membuat format JSON lebih populer dibandingkan dengan XML yang memakai *tag* pembuka dan penutup untuk setiap elemennya.
-
-### Apakah fungsi dari `is_valid()` pada form Django?
-Method `is_valid()` berfungsi untuk proses validasi data yang akan dimasukkan pengguna platform kita ke dalam *form*. Method ini akan memeriksa *input* dari pengguna jika data yang akan dikirim sesuai dengan apa yang kita tentukan sebelumnya. Jika *input* tersebut valid, maka *method* ini akan mengembalikan `True`. Jika data tidak valid, *method* ini mengembalikan `False`. Kita dapat memanfaatkan *value* yang dikeluarkan dari *method* ini untuk menentukan langkah selanjutnya, seperti mengeluarkan pesan error yang bersangkutan atau langsung memproses data yang dimasukkan pengguna ke platform kita (seperti memasukkan data ke *database* atau lainnya).
-
-Tanpa *method* `is_valid()`, kita akan kesulitan dalam memvalidasi data yang akan masuk ke dalam platform kita. Adanya validasi dari *input* pengguna dapat menjamin integritas dan keamanan dari data yang platform kita miliki. *Input-input* nakal dari pengguna yang tidak bertanggungjawab bisa kita hindari dengan `method` ini.
-
-### Mengapa kita membutuhkan `csrf_token` saat membuat form di Django?
-CSRF (*Cross-Site Request Forgery*) token adalah salah satu komponen yang krusial dalam membuat *form* di platform Django kita. CSRF token berfungsi untuk memvalidasi *request* yang dikirim pengguna dan melindungi platform kita dari serangan CSRF. 
-
-Serangan CSRF adalah sebuah serangan siber dimana seseorang mencoba untuk memanipulasi akses ke platform kita lewat akses autentikasi yang sudah mereka dapat sebelumnya. Karena autentikasi yang mereka sudah dapatkan valid (bukan palsu), aplikasi/platform yang kita miliki biasanya tidak akan membatasi akses dari pengguna nakal tersebut. Hal ini memungkinkan seseorang untuk mengeksploitasi akses-akses dan perintah-perintah yang dapat dilakukan dengan bermodal kepercayaan yang sudah platform kita percayai kepada mereka.
-
-Token CSRF yang ada di Django ini akan memverifikasi bahwa *request* POST yang diterima benar-benar berasal dari *input form* yang valid di platform kita, bukan dari tempat lainnya. CSRF token bersifat unik untuk setiap sesi pengguna, sehingga membuatnya menjadi lapisan keamanan tambahan yang efektif.
-
-### Pengaksesan Data pada Postman
-
-#### 1. All Products in XML
-![SS Bukti](assets/assignment/Get%20All%20XML.png)
-#### 2. All Products in JSON
-![SS Bukti](assets/assignment/Get%20All%20JSON.png)
-#### 3. Product by ID in XML
-![SS Bukti](assets/assignment/Get%20by%20ID%20XML.png)
-#### 4. Product by ID in JSON
-![SS Bukti](assets/assignment/Get%20by%20ID%20JSON.png)
-
+| Tugas Sebelumnya --> | [Tugas 2](https://github.com/hyvos07/celestia/wiki/Tugas-2) | [Tugas 3](https://github.com/hyvos07/celestia/wiki/Tugas-3) |
+|-|-|-|
 
 <br>
 
-## Tugas 2
-### Step by Step Pembuatan Project Django
-1. Membuat direktori baru bernama `celestia` dan inisiasi *local repository* di folder tersebut.
+## Tugas 4
+### Implementasi Autentikasi, *Session*, dan *Cookies* pada tugas ini
 
-2. Membuat GitHub repository yang dihubungkan dengan *local repository* `celestia`
+sesuatuuu
 
-3. Membuat *virtual environment* baru dan jalankan env tersebut untuk project ini dengan *command*:
-   ```bash
-   python -m venv env
-   env\Scripts\activate
-   ```
-4. Membuat file `requirements.txt` yang berisi:
-    ```txt
-    django
-    gunicorn
-    whitenoise
-    psycopg2-binary
-    requests
-    urllib3
+
+### Perbedaan antara `HttpResponseRedirect()` dan `redirect()`
+
+Pada suatu *project* Django, `HttpResponseRedirect()` dan `redirect()` sama-sama berfungsi untuk mengalihkan *user* ke suatu URL lain yang ada di `urls.py`. Namun, terdapat perbedaan di antara keduanya, yaitu:
+
+1. Perintah `HttpResponseRedirect()`
+
+    `HttpResponseRedirect()` adalah sebuah *method* yang digunakan untuk membuat *response* HTTP yang mengarahkan *user* ke URL yang dimasukkan di dalamnya. `HttpResponseRedirect()` hanya bisa menerima URL yang ingin dituju, bukan nama *views* atau *model*. Contoh penggunaannya ada di *views* `login_user()`.
+    ``` python
+    def login_user(request):
+        if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
+
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main"))  # reverse() disini mengembalikan URL dari views show_main
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+
+        else:
+            form = AuthenticationForm(request)
+        context = {'form': form}
+        return render(request, 'login.html', context)
     ```
-    dan meng-*install requirements* tersebut dengan pip.
-    ```bash
-    pip install -r requirements.txt
+
+2. Perintah `redirect()`
+
+    `redirect()` adalah *shortcut method* yang lebih sederhana dan lebih fleksibel dari `HttpResponseRedirect()`. Fungsi ini sebenarnya juga menggunakan `HttpResponseRedirect()` di dalamnya. Namun, berbeda dengan `HttpResponseRedirect()`, `redirect()` dapat menerima URL, nama view, bahkan sebuah objek model dan akan mengarahkan *user* ke URL yang sesuai. Contoh penggunaannya pada *views* `register()` dapat dilihat di bawah berikut.
+    ``` python
+    def register(request):
+        form = UserCreationForm()
+
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')   # redirect() dapat menerima nama views secara langsung
+        context = {'form':form}
+        return render(request, 'register.html', context)
     ```
 
-5. Membuat proyek Django baru dengan *command*:
-    ```bash
-    django-admin startproject celestia .
-    ```
-    Lalu melakukan beberapa penyesuaian di `settings.py` untuk project yang baru dibuat tersebut.
+    **Lalu, apa bedanya?** Jika dilihat pada penggunaan kedua *method* tersebut, method `redirect()` lebih mudah dan efisien untuk digunakan, sehingga membuatnya lebih sering digunakan pada saat kita hanya perlu berganti *views* atau *page* yang ada di platform kita. 
+    
+    Berbeda dengan `redirect()`, *method* `HttpResponseRedirect()` lebih sering digunakan saat kita memerlukan kontrol yang lebih spesifik pada *response* yang kita akan kirim ke sisi *user*. Seperti pada *views* `login_user()` di atas, kita perlu menyimpan *cookies* berupa `last_login` pada *browser* *user*, sehingga kita lebih cocok untuk menggunakan `HttpResponseRedirect()` untuk proses ini.
 
-6. Membuat aplikasi dengan nama `main` pada proyek ini dengan menjalankan *command*:
-    ```bash
-    python manage.py startapp main
+    **Jika `redirect()` itu sendiri menggunakan dan mengembalikan hal yang sama dengan `HttpResponseRedirect()` di dalamnya, bukankah `redirect()` saja juga bisa digunakan untuk menyimpan *cookies*?** Ya, `redirect()` bisa digunakan untuk melakukan modifikasi dan menambah *header*, *cookies*, status *response*, maupun komponen lainnya sama seperti `HttpResponseRedirect()`. Contohnya seperti ada di bawah berikut.
+    ``` python
+    # Kode lain ...
+    response = redirect("main:show_main")
+    response.set_cookie('last_login', str(datetime.datetime.now()))
+    return response
     ```
-    setelah dibuat, aplikasi `main` juga perlu ditambahkan ke `celestia/settings.py` pada variable `INSTALLED_APPS` agar dapat menjalankan aplikasi `main` tersebut.
+    Walaupun begitu, `redirect()` dinilai tidak terlalu cocok untuk mendapatkan kontrol penuh dalam memodifikasi *response* yang kita miliki. `HttpResponseRedirect()` dapat memberikan kontrol yang lebih baik atas *response* HTTP, termasuk pengaturan *cookie*. Oleh karena itu, `HttpResponseRedirect()` lebih sering digunakan saat kita perlu memanipulasi *cookie* atau melakukan modifikasi komponen *response* lainnya.
 
-7. Membuat model `Product` dengan atribut sebagai berikut:
+
+### Cara Kerja Penghubungan Model `Product` dengan `User`
+
+Pada Tugas 4 ini, terdapat penghubungan *model* `Product` yang dimiliki oleh aplikasi `main` dengan data `User` sebagai suatu *field* baru di `Product`. Dengan adanya penghubungan ini, suatu `Product` sekarang dimiliki oleh seorang `User` di *database* yang kita miliki. Cara kerja penghubungan kedua *model* ini adalah dengan meng-*assign* sebuah *entity* `User` sebagai ***Foreign Key*** pada model `Product`. Penggabungan tersebut dilakukan dengan menambah *field* pada *model* seperti demikian.
+```python
+from django.contrib.auth.models import User
+
+class Product(models.Model): 
+    # Other attribute...
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Other attribute...
+```
+
+Pada potongan kode di atas, model `Product` akan ditambahkan informasi `User` yang menjadi pemilik dari produk tersebut di database. Penambahan ini dilakukan dengan menambah *field* `user`, yang diisi dengan sebuah *Foreign Key* berupa model dari `User` yang menambahkan produk tersebut.
+
+**Apa itu Foreign Key?** *Foreign Key* adalah sebuah tipe *field* yang berguna untuk membuat sebuah hubungan (dalam kasus ini) ***many-to-one*** antara *model* `Product` dan `User`. Dengan menggunakan konfigurasi *Foreign Key* seperti yang ada di dalam *project* ini, sebuah `Product` dapat memiliki hubungan dengan hanya satu `User`, sedangkan seorang `User` dapat memiliki banyak `Product` yang ia miliki di dalam *database*. 
+
+Pada inisiasi *Foreign Key* di atas, terdapat pula parameter `on_delete` yang diisi dengan `models.CASCADE` pada `models.ForeignKey()`. Opsi `models.CASCADE` menandakan jika data seorang *user* di *database* dihapus, maka seluruh produk yang *user* tersebut miliki di *database* juga akan dihapus bersamanya. Hal ini dilakukan untuk mencegah adanya entri produk "terlantar" yang tidak memiliki pemilik.
+
+
+### *Authentication* vs *Authorization*
+
+- ***Authentication***
+
+    Authentication atau autentikasi merupakan sebuah proses untuk **memverifikasi identitas dari seorang *user***. Proses autentikasi memastikan bahwa *user* yang sedang mengakses platform kita adalah memang seseorang yang mereka klaim. Proses autentikasi biasanya dilakukan dengan meminta *user* untuk memasukkan kredensial akun atau identitasnya, seperti sebuah *username* dan *password*. Proses ini terjadi setelah seorang *user* melakukan percobaan *login* pada sistem kita.
+
+    Di dalam Django, pada saat seorang *user* sudah melakukan aktivitas *login*, proses autentikasi akan dilakukan. Django memeriksa kredensial *user*, contohnya *form login*. Jika kredensial yang dimasukkan *user* valid, Django akan membuat *session* untuk *user* yang terautentikasi tersebut dan mengaitkan identitas *user* dengan *session* tersebut.
+
+    Pada *project* ini, proses autentikasi dilakukan secara otomatis dengan sistem autentikasi bawaan dari Django. Proses login ini terjadi pada *views* `login_user()` di `views.py`.
     ```python
-    name: CharField,
-    price: IntegerField,
-    description: TextField,
-    stock: IntegerField,
-    chara: CharField,
-    game: CharField,
-    category: CharField,
-    image: TextField,
-    price_with_comma: int,      # Internal Property
-    image_URL : String,         # Internal Property
-    is_stock_empty: bool,       # Internal Property
+    def login_user(request):
+        if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
+
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main"))
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+        else:
+            form = AuthenticationForm(request)
+        context = {'form': form}
+        return render(request, 'login.html', context)
     ```
-    **N.B.** <br> Ada beberapa *field* yang masih dalam bentuk sederhana, sehingga tidak ada di dalam bentuk aslinya (seperti `image` yang seharusnya menggunakan `ImageField`) agar dapat lebih diperdalam di minggu-minggu berikutnya.
+    Sistem bawaan yang dimiliki oleh Django untuk mengautentikasi *user* yang akan *login* berasal dari *method* `AuthenticationForm()`. *Method* tersebut dapat diproses otomatis oleh Django menjadi *form login* dengan menambahkan `{{ form.as_table }}` pada *template* HTML yang bersangkutan. Saat *user* berhasil *login*, Django akan membuat entri *session* di *database* (menggunakan *middleware session*), dan mengaitkannya dengan ID dari *user* yang terautentikasi.
 
-8. Membuat function `show_main()` pada `views.py` untuk bisa me-*return* template HTML bernama `main.html` yang dibuat di direktori `templates`. <br> HTML tersebut akan menampilkan nama aplikasi, data dari `show_main()` dan identitas diri sendiri.
+2. *Authorization*
 
-9. Membuat sebuah *routing* pada `urls.py` dalam direktori aplikasi `main` untuk memetakan fungsi yang telah dibuat pada `views.py`. Di `urls.py`, ditambahkan `path('', show_main, name='show_main')` ke dalam `urlpatterns` milik aplikasi `main`.
+    Berbeda dengan autentikasi, *authorization* atau otorisasi adalah sebuah proses **memverifikasi hak akses *user* terhadap sumber daya atau tindakan tertentu**. Django akan menentukan apa saja aktivitas yang diizinkan untuk dilakukan oleh *user* tersebut setelah mereka berhasil terautentikasi. Seorang *user* yang sudah login dapat memiliki akses ke dashboard *admin*, sementara *user* lain mungkin hanya bisa mengakses halaman biasa saja. *User* yang memiliki hak sebagai *admin* dapat mengakses panel *admin*, sementara *user* biasa hanya dapat mengakses profilnya sendiri.
 
-10. Terakhir, *push* kode ke GitHub dan lakukan *deployment* ke PWS agar dapat diakses oleh orang lain. Hasil *deployment* dari proyek ini dapat diakses di bagian [atas](#readme-top).
+    Pada *project* ini, terdapat *authorization* pada saat seorang *user* ingin mengakses halaman utama dari situs web ini.  Otorisasi tersebut terletak pada decorator `@login_required(login_url='/login')` yang mengatur *user* yang belum *login* untuk login terlebih dahulu di /login, yaitu path di `urls.py` yang mengarah pada halaman login. Contoh dari authorization tersebut adalah sebagai berikut.
+    ```python
+    @login_required(login_url='/login')
+    def show_main(request):
+        mood_entries = MoodEntry.objects.filter(user=request.user)
+        ...
+    ```
+    Selain decorator `@login_required()`, terdapat juga decorator-decorator otorisasi lainnya seperti `@permission_required`.
+    
+    <br>
+    Singkatnya,
+    
+    ***Authentication*** --> menjawab pertanyaan “Siapa Anda?”<br>
+    ***Authorization*** --> menjawab pertanyaan “Apa yang boleh Anda lakukan?”
 
-### Bagan Gambaran Request Client ke Django
 
-<img alt="Django MVT Flow" src="assets\assignment\Django MVT.png" />
+### Bagaimana Django mengingat *user* yang telah login? 
 
-Penjelasan lanjutan tentang kaitan `urls.py`, `views.py`, `models.py`, dan berkas HTML untuk sebagai *template*:
-- `urls.py` dalam Django Project akan menentukan *views* apa yang perlu dikembalikan ke pihak *client* berdasarkan ***request*** yang dikirim oleh *client*.
-- `views.py` menyimpan *business logic* dan pemrosesan data yang diminta pada ***request*** dari *client*. Hasil data dari *views* tersebut dapat dikembalikan bersama dengan tampilan web dari *template* `.html` yang dibuat.
-- *Template* HTML berfungsi untuk mengembalikan ***response*** berupa sebuah *web page* kepada *client*, dengan tampilan sesuai dengan apa yang sudah diminta oleh *client* sebelumnya.
-- `models.py` berfungsi sebagai jembatan perantara antara *database* dan *views*. Di dalam `models.py`, disimpan bentuk model dari data yang ada di dalam *database*. Dengan `models.py`, `views.py` juga dapat berinteraksi dan mengambil data-data dari *database* sehingga data-data tersebut dapat diproses untuk memenuhi permintaan ***request***.
+Django mengingat *user* yang telah login melalui mekanisme ***session***. Session membantu Django untuk mempertahankan status dan data dari *user* selama mereka mengirim berbagai *request* HTTP. Saat *user* berhasil *login*, Django akan membuat sebuah *session* dan memberikan sebuah *session* cookie kepada *browser* pengguna. *Cookie* ini akan dikirimkan kembali ke *server* pada setiap permintaan berikutnya, sehingga Django dapat mengidentifikasi pengguna tersebut tanpa harus *login* untuk setiap aksi di aplikasi kita.
 
-### Fungsi `git` pada Pengembangan Perangkat Lunak
 
-Dalam proses pengembangan perangkat lunak, `git` memiliki banyak kegunaan pada aspek-aspek yang melibatkan kolaborasi antar sesama *developer* dan manajemen pengelolaan dari suatu proyek *software application*. Aspek-aspek tersebut dapat dijabarkan sebagai berikut.
+### Jelaskan kegunaan lain dari *cookies* dan apakah semua *cookies* aman digunakan?
 
-1. ***Version Control*** <br>
-`git` dapat menyimpan perubahan kode dari suatu proyek secara rinci. Setiap kali ada perubahan pada kode, seorang *developer* dapat mencatatnya di `git` sebagai sebuah ***commit***, sehingga *developer* tersebut maupun rekannya dapat mengetahui detail dari siapa, kapan, dan alasan perubahan kode tersebut. Pencatatan dalam bentuk *commit* ini juga mempermudah proses *rollback* ke versi sebelumnya jika ada masalah yang terjadi pada kode sekarang.
+Terdapat berbagai macam kegunaan *cookies* untuk berbagai fitur yang disediakan oleh sistem web kita, seperti:
+- Penyimpanan preferensi *user*
+- Membuat *targeted advertising* (Iklan yang Dipersonalisasi)
+- Autentikasi berkelanjutan (*Remember Me*) sehingga *user* tidak perlu login setiap saat.
+- dan lainnya.
 
-2. **Kolaborasi (*Branching and Merging*)** <br>
-`git` memiliki sistem percabangan yang dapat memisahkan kode untuk fitur baru, perbaikan bug, dan lainnya. Setiap *developer* yang terlibat dalam proyek dapat membuat cabang atau *branch* baru untuk pekerjaan mereka masing-masing **tanpa mengganggu kode utamanya**. Setelah kode mereka sudah siap, *branch* tersebut dapat digabungkan kembali ke kode utama dengan perintah *merge*.
+Walaupun begitu, tidak semua *cookies* yang ditawarkan oleh berbagai situs web di internet selalu aman. Penggunaan *cookies* dapat memunculkan beberapa risiko keamanan, terutama jika tidak dikelola dengan benar. Contoh-contoh dari *cookies* yang tidak aman adalah:
 
-3. ***Anytime and Anywhere Development*** <br>
-Proyek yang menggunakan `git` dapat diinisiasi sebagai *repository* lokal dan disinkronkan dengan *remote repository* seperti GitHub atau GitLab. Hal ini memungkinkan *developer* dan rekannya untuk mengakses, mengubah, dan mengunggah perubahan pada kode dari berbagai lokasi dan *workspace* yang mereka miliki, selama terhubung dengan *remote repository* yang sama.
+1. **Cross-Site Scripting (XSS) dan Session Hijacking** --> Mengambil *cookies* dari *user* yang berisi hal-hal penting dengan memakai sebuah *script*. Jika *cookie* yang berisi *session* ID dari seorang *user* dicuri, penyerang dapat menggunakan *session* ID tersebut untuk mengambil alih sesi *user* dan bertindak seolah-olah mereka adalah pengguna yang sah.
 
-### Kenapa Django dijadikan *framework* yang pertama kali kami pelajari?
+2. **Cross-Site Request Forgery (CSRF)** --> Penyerang CSRF dapat memaksa *user* yang sudah *login* dan terautentikasi di suatu situs untuk melakukan tindakan yang tidak diinginkan, seperti mentransfer uang atau mengubah pengaturan akun. Serangan ini terjadi ketika penyerang memanfaatkan *session cookie* yang secara otomatis dikirimkan oleh *browser* setiap kali permintaan dibuat ke *server*.
 
-Django cocok digunakan sebagai *framework* pertama yang kami pelajari dalam pembelajaran pengembangan perangkat lunak karena:
-
-1. Django dianggap **lebih mudah untuk digunakan** daripada *framework-framework* lainnya. Hal ini dikarenakan Django memiliki banyak fitur bawaan yang sudah cukup lengkap di dalamnya. Hal ini sejalan dengan *tagline*-nya, yaitu *"The Framework for Perfectionists with Deadlines"* yang menunjukkan bahwa Django dirancang untuk bisa bekerja lebih efisien tanpa perlu menambahkan banyak *library* eksternal.
-
-2. Django **memiliki dokumentasi serta komunitas yang sangat baik dan informatif**, sehingga memudahkan para penggunanya dalam memahami konsep dasar dan cara penggunaan Django. Di dalam dokumentasi Django bahkan mencakup tutorial lengkap untuk membuat proyek sederhana dengan contoh dari kasus nyata, sehingga sangat membantu bagi pemula yang baru belajar.
-
-3. Django menawarkan **keamanan bawaan yang kuat** untuk melindungi aplikasi dari berbagai serangan siber seperti SQL Injection dan Cross-Site Request Forgery (CSRF). Fitur keamanan bawaan ini berguna bagi pemula yang belum familiar dengan ancaman serangan siber dari orang-orang nakal di luar sana.
-
-### Mengapa model pada Django disebut sebagai ORM atau *Object-Relational Mapping*?
-
-Model Django disebut sebagai ORM karena Django memungkinkan kita untuk berinteraksi dengan *database* **menggunakan objek dari Python**. Kita tidak perlu menulis *query* SQL lagi jika ingin berinteraksi dengan *database* yang dikelola oleh Django. Setiap model di Django direpresentasikan sebagai tabel dalam *database*, dengan atribut dari model tersebut sebagai kolom-kolomnya.
-
-Django dapat mengelola konversi antara sintaks dan objek Python ke dalam *query* SQL, maupun sebaliknya. Konversi otomatis ini memudahkan kita dalam melakukan operasi pada *database* seperti membuat, membaca, mengubah, serta menghapus data. Django juga dapat menerima berbagai jenis *database*, sehingga membuat kita tidak perlu khawatir tentang perbedaan antar DBMS yang digunakan.
+3. **Penyalahgunaan Persistent Cookies dan Privasi Data** --> *Cookies* yang bersifat *persistent* dapat melacak aktivitas pengguna di berbagai *session* atau situs. *Cookies* ini berpotensi mengancam privasi *user*, terutama dalam kasus pelacakan lintas situs untuk tujuan iklan yang agresif.
 
