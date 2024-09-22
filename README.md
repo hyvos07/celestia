@@ -157,7 +157,7 @@ Pada inisiasi *Foreign Key* di atas, terdapat pula parameter `on_delete` yang di
 
 ### Bagaimana Django mengingat *user* yang telah login? 
 
-Django mengingat *user* yang telah login melalui mekanisme ***session***. Session membantu Django untuk mempertahankan status dan data dari *user* selama mereka mengirim berbagai *request* HTTP. Saat *user* berhasil *login*, Django akan membuat sebuah *session* dan memberikan sebuah *session* cookie kepada *browser* pengguna. *Cookie* ini akan dikirimkan kembali ke *server* pada setiap permintaan berikutnya, sehingga Django dapat mengidentifikasi pengguna tersebut tanpa harus *login* untuk setiap aksi di aplikasi kita.
+Django mengingat *user* yang telah login melalui mekanisme ***session*** dan ***cookies***. *Session* membantu Django untuk mempertahankan status dan data dari *user* selama mereka mengirim berbagai *request* HTTP. Lalu, saat *user* berhasil *login*, Django akan membuat sebuah *session* dan memberikan sebuah *session cookie* kepada *browser* pengguna. *Cookies* ini akan dikirimkan kembali ke *server* pada setiap permintaan berikutnya, sehingga Django dapat mengidentifikasi pengguna tersebut tanpa harus *login* untuk setiap aksi di aplikasi kita.
 
 
 ### Jelaskan kegunaan lain dari *cookies* dan apakah semua *cookies* aman digunakan?
@@ -168,7 +168,7 @@ Terdapat berbagai macam kegunaan *cookies* untuk berbagai fitur yang disediakan 
 - Autentikasi berkelanjutan (*Remember Me*) sehingga *user* tidak perlu login setiap saat.
 - dan lainnya.
 
-Walaupun begitu, tidak semua *cookies* yang ditawarkan oleh berbagai situs web di internet selalu aman. Penggunaan *cookies* dapat memunculkan beberapa risiko keamanan, terutama jika tidak dikelola dengan benar. Contoh-contoh dari *cookies* yang tidak aman adalah:
+Walaupun begitu, tidak semua *cookies* yang ditawarkan oleh berbagai situs web di internet selalu aman di pegangan kita. Keteledoran pengelolaan *cookies* dapat memunculkan beberapa risiko keamanan. Contoh-contoh akibat dari pengelolaan *cookies* yang tidak benar adalah:
 
 1. **Cross-Site Scripting (XSS) dan Session Hijacking** --> Mengambil *cookies* dari *user* yang berisi hal-hal penting dengan memakai sebuah *script*. Jika *cookie* yang berisi *session* ID dari seorang *user* dicuri, penyerang dapat menggunakan *session* ID tersebut untuk mengambil alih sesi *user* dan bertindak seolah-olah mereka adalah pengguna yang sah.
 
@@ -176,3 +176,4 @@ Walaupun begitu, tidak semua *cookies* yang ditawarkan oleh berbagai situs web d
 
 3. **Penyalahgunaan Persistent Cookies dan Privasi Data** --> *Cookies* yang bersifat *persistent* dapat melacak aktivitas pengguna di berbagai *session* atau situs. *Cookies* ini berpotensi mengancam privasi *user*, terutama dalam kasus pelacakan lintas situs untuk tujuan iklan yang agresif.
 
+Untuk mencegah hal-hal tersebut, Django memiliki sistem keamanan yang bisa menjaga *cookies* yang dimiliki *user* dari serangan siber di atas. Django memiliki parameter-parameter pada *method* `set_cookie` seperti `HttpOnly` yang mencegah *cookies* diakses oleh pihak lain lewat *script* JavaScript di browser mereka, parameter `secure` yang memastikan cookies hanya dapat dikirim melalui koneksi HTTPS, dan `samesite` (dengan bantuan CSRF token) yang memastikan *cookies* tidak akan bisa diakses dari domain atau situs lain.
