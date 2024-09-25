@@ -30,7 +30,84 @@ If you want to try and run the project from your local device, open http://127.0
 ## Tugas 4
 ### Implementasi Autentikasi, *Session*, dan *Cookies* pada tugas ini
 
-sesuatuuu
+- **Mengimplementasikan fungsi registrasi, *login*, dan *logout***
+
+    Implementasi registrasi pada projek ini dapat dilakukan dengan menambahkan *views* baru untuk mengirim *request* membuat akun baru. Hal ini bisa dilakukan dengan praktis menggunakan *form* bawaan dari Django, yaitu `UserCreationForm`. *Template* HTML yang bernama `register.html` juga dibuat untuk bisa menampilkan tampilan HTML dari *views* registrasi.
+    ```python
+    def register(request):
+        form = UserCreationForm()
+
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+        context = {'form':form}
+        return render(request, 'register.html', context)
+    ```
+
+    Setelah registrasi, dibuat implementasi dari *views login* agar *user* bisa masuk ke akunnya sendiri. Sama seperti registrasi, Django sudah memiliki *form* bawaan yang bernama `AuthenticationForm` untuk mengautentikasi proses login yang dilakukan oleh *user* dengan praktis. Dibuat pula HTML untuk menampilkan *views* dari proses login ini bernama `login.html`.
+    ```python
+    def login_user(request):
+        if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
+
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main"))
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+
+        else:
+            form = AuthenticationForm(request)
+        context = {'form': form}
+        return render(request, 'login.html', context)
+    ```
+    Pada *views* di atas, diimplementasikan juga *Cookies* yang akan disimpan di *browser* milik *user* untuk menyimpan data terakhir kali *user* melakukan login ke projek.
+
+    Selanjutnya dibuat *views* untuk *logout*, dengan memakai method `logout()` yang dimiliki oleh Django langsung. Pada saat *user* berhasil *logout*, Cookies tentang data terakhir kali *user* login juga akan dihapus.
+    ```python
+    def logout_user(request):
+        logout(request)
+        response = HttpResponseRedirect(reverse('main:login'))
+        response.delete_cookie('last_login')
+        return response
+    ```
+    Agar user bisa *logout*, ditambahkan pula elemen HTML baru di *navbar* yang dapat di-klik dan menjalankan *views logout* yang sudah dibuat di atas.
+    ```html
+    <a href="{% url 'main:logout' %}">Logout</a>
+    ```
+
+    Terakhir, pastikan semua *views* dapat diakses dengan menambahkannya kedalam `urls.py` yang ada di direktori aplikasi `main`.
+    ```python
+    urlpatterns = [
+        ...
+        path('register/', register, name='register'),
+        path('login/', login_user, name='login'),
+        path('logout/', logout_user, name='logout'),
+        ...
+    ]
+    ```
+
+- **Membuat dua akun pengguna dengan masing-masing tiga *dummy data***
+
+    Untuk membuat 2 akun secara lokal, cukup lakukan registrasi di `localhost:8000/register` sebanyak 2 kali. Setelah registrasi, *login* dengan akun yang sudah dibuat sebelumnya untuk nantinya bisa membuat produk baru di halaman `/create-product`. Pada sistem lokal saya, sudah terbentuk 2 akun dengan username `daniel` dan `liman`.
+
+    - Akun `daniel`
+
+        ![Akun daniel](assets/assignment/Akun%20daniel.png)
+
+    - Akun `liman`
+
+        ![Akun liman](assets/assignment/Akun%20liman.png)
+
+    <br>
+
+    Bukti akun di sistem *admin* Django
+    
+    ![Admin Database](assets/assignment/bukti%20admin.png)
 
 
 ### Perbedaan antara `HttpResponseRedirect()` dan `redirect()`
