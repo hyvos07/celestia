@@ -75,6 +75,13 @@ footer {
     color: #171e2a;
     border: 1px solid #aaa;
 }
+.main h5{
+    position: absolute;
+    bottom: 25px;
+    font-family: 'Poppins', helvetica;
+    font-weight: 600;
+    color: #1d2736;
+}
 
 
 /* Data tag */

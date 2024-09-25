@@ -20,17 +20,17 @@
 
 {% block content %}
 <nav class="app-bar">
-    <img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo">
+    <a href="{% url 'main:show_main' %}"><img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo"></a>
     <div class="options">
-        <a href="{% url 'main:show_main' %}">Home</a>
         <a href="{% url 'main:create_product' %}">Add New Item</a>
+        <a href="{% url 'main:logout' %}">Logout</a>
     </div>
 </nav>
 
 <div class="background-image"></div>
 
 <div class="main">
-    <p> Our Products </p>
+    <p> Hello {{ username }}! </p>
     {% if not all_products %}
         <p class="not-found">Belum ada produk yang tersimpan!</p>
     {% else %}
@@ -62,6 +62,7 @@
         </table>
     </div>
     {% endif %}
+    <h5> You have been here for {{ last_login }}.</h5>
 </div>
 
 <footer>
