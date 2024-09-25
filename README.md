@@ -109,6 +109,33 @@ If you want to try and run the project from your local device, open http://127.0
     
     ![Admin Database](assets/assignment/bukti%20admin.png)
 
+- **Menghubungkan model `Product` dengan `User`.**
+
+    Untuk menggabungkan model `Product` dengan `User`, model `Product` memerlukan atribut baru yang mengandung *Foreign Key* dari model *user*, sehingga terdapat relasi dari kedua model. Hal ini bisa dilakukan dengan membuat atribut yang berisi `models.ForeignKey()` dengan model yang dituju adalah `User`.
+    ```python
+    ...
+    from django.contrib.auth.models import User
+
+    class Product(models.Model):
+        ...
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        ...
+    ```
+
+    Setelah menambahkan atribut baru di atas, *database* dapat di-*update* untuk menambah kolom baru bernama `user` dengan menjalankan kedua perintah di bawah.
+    ``` bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+- **Menampilkan detail informasi pengguna yang sedang logged in dan menerapkan cookies**
+
+    Pada projek ini, *username* dari akun *user* akan digunakan untuk menyapa mereka di halaman utama. Seperti gambar di bawah ini, user `daniel` disapa tepat diatas tabel yang berisi produk yang ia tambahkan.
+
+    ![Contoh](assets/assignment/Akun%20daniel.png)
+
+    Selain itu, disimpan pula *cookies* `last_login` yang berisi *timestamp* dari aktivitas login user pada saat ini. *Cookies* ini digunakan untuk menampilkan sudah berapa lama sejak *user* login ke aplikasi, yang terletak di bawah tabel produk (Tulisan "You have been here for 48 minutes.").
+
 
 ### Perbedaan antara `HttpResponseRedirect()` dan `redirect()`
 
