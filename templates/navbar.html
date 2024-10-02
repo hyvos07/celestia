@@ -11,13 +11,11 @@
   }
 </style>
 
-<nav class="p-[15px] px-[35px] sticky top-0 bg-[#171e2a] flex justify-between items-center z-[1000]">
-    <a href="{% url 'main:show_main' %}"><img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo" class="w-full max-w-[100px] md:max-w-[120px]"></a>
+<nav class="p-[15px] px-[30px] sticky top-0 bg-[#171e2a] flex justify-between items-center z-[1000]">
+    <a href="{% url 'main:show_main' %}"><img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo" class="w-full max-w-[100px] ml-[-2px] md:max-w-[120px]"></a>
 
-    <button id="hamburger" class="md:hidden text-white mr-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
-            <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
-        </svg>
+    <button id="hamburger" class="md:hidden text-white" onclick="toggleSidebar()">
+        <img src="{% static 'assets/logo/menu.svg' %}" alt="Menu" class="h-6 w-6">
     </button>
     
     <div class="hidden md:flex py-[10px] options">
