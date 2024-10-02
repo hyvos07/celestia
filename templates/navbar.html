@@ -1,0 +1,10 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/global.css' %}">
+
+<nav class="p-[15px] px-[35px] sticky top-0 bg-[#171e2a] flex justify-between items-center z-[1000]">
+    <a href="{% url 'main:show_main' %}"><img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo" class="w-full max-w-[100px] md:max-w-[120px]"></a>
+    <div class="py-[10px] options">
+        <a href="{% url 'main:create_product' %}">Add New Item</a>
+        <a href="{% url 'main:logout' %}">Logout</a>
+    </div>
+</nav>

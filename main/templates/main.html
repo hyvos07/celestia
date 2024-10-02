@@ -19,53 +19,24 @@
 {% endblock meta %}
 
 {% block content %}
-<nav class="app-bar">
-    <a href="{% url 'main:show_main' %}"><img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo"></a>
-    <div class="options">
-        <a href="{% url 'main:create_product' %}">Add New Item</a>
-        <a href="{% url 'main:logout' %}">Logout</a>
-    </div>
-</nav>
-
+{% include 'navbar.html' %}
 <div class="background-image"></div>
 
-<div class="main">
-    <p> Hello {{ username }}! </p>
+<div class="bg-[#f8f4f4] flex flex-col justify-center items-center mx-0 md:ml-[120px] md:mr-[120px] p-[25px] px-[40px] pb-[100px] mt-[-70px] md:mt-[-60px] z-[1] rounded-t-[20px] box-border relative">
+    <p class="text-center mt-[10px] text-[#373E41] title"> Your Product </p>
     {% if not all_products %}
-        <p class="not-found">Belum ada produk yang tersimpan!</p>
+        <p class="mt-[20px] p-[100px] text-[#adadad] not-found">Belum ada produk yang tersimpan!</p>
     {% else %}
-    <div class="table-container">
-        <table>
-            <tr>
-                <th>Nama Produk</th>
-                <th>Harga</th>
-                <th>Deskripsi</th>
-                <th>Stok</th>
-                <th>Chara</th>
-                <th>Game</th>
-                <th>Category</th>
-                <th>Image</th>
-            </tr>
-
-            {% for product in all_products %}
-            <tr>
-                <td>{{product.name}}</td>
-                <td>{{product.price_with_comma}}</td>
-                <td>{{product.description}}</td>
-                <td>{{product.stock}}</td>
-                <td>{{product.chara}}</td>
-                <td>{{product.game}}</td>
-                <td>{{product.category}}</td>
-                <td><img src="{{product.image}}" width="100"></td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="flex flex-wrap gap-6 w-full py-8 justify-center">
+        {% for product in all_products %}
+            {% include 'product_card.html' with product=product %}
+        {% endfor %}
     </div>
     {% endif %}
-    <h5> You have been here for {{ last_login }}.</h5>
+    <p class="absolute bottom-[30px] font-semibold text-[#1d2736] last-login"> Last Login: {{ last_login }} ago</p>
 </div>
 
-<footer>
+<footer class="py-[12px] md:p-4 m-0 bg-[#171e2a] text-white relative w-auto bottom-0">
     <p>Made by Daniel Liman - 2306220753 - PBP F</p>
 </footer>
 {% endblock content %}

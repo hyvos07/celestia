@@ -1,0 +1,56 @@
+/* HTML tag */
+body{
+    background-color: #1d2736;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    font-family: 'Poppins', helvetica;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Elements */
+/* .main{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+} */
+
+.not-found{
+    font-family: 'Poppins', helvetica;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+}
+
+.last-login {
+    font-family: 'Poppins', helvetica;
+    font-weight: 600;
+}
+
+.title {
+    font-family: 'Poppins', helvetica;
+    font-weight: 700;
+    font-size: 32px;
+}
+
+
+/* Responsive (ga guna amat sih ya) */
+@media (max-width: 768px) {
+    .title {
+        font-size: 24px;
+    }
+
+    .last-login{
+        font-size: 16px;
+    }
+}
