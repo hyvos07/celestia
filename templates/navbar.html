@@ -1,10 +1,51 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'styles/global.css' %}">
 
+<style>
+  .dropdown-menu {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .dropdown-menu.open {
+    transform: translateY(0);
+  }
+</style>
+
 <nav class="p-[15px] px-[35px] sticky top-0 bg-[#171e2a] flex justify-between items-center z-[1000]">
     <a href="{% url 'main:show_main' %}"><img src="{% static 'assets/logo/Horizontal.png' %}" alt="Logo" class="w-full max-w-[100px] md:max-w-[120px]"></a>
-    <div class="py-[10px] options">
-        <a href="{% url 'main:create_product' %}">Add New Item</a>
-        <a href="{% url 'main:logout' %}">Logout</a>
+
+    <button id="hamburger" class="md:hidden text-white mr-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+            <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+        </svg>
+    </button>
+    
+    <div class="hidden md:flex py-[10px] options">
+        <a href="{% url 'main:create_product' %}" class="text-white mr-4">Add New Item</a>
+        <a href="{% url 'main:logout' %}" class="text-white">Logout</a>
     </div>
 </nav>
+
+<div id="dropdown-menu" class="dropdown-menu fixed top-[50px] left-0 w-full bg-[#171e2a] z-[999] md:hidden">
+    <div class="p-4">
+        <div class="flex flex-col">
+            <a href="{% url 'main:create_product' %}" class="text-white text-lg font-semibold py-2 use-poppins" style="font-size: 14px;">Add New Item</a>
+            <a href="{% url 'main:logout' %}" class="text-white text-lg font-semibold py-2 use-poppins" style="font-size: 14px;">Logout</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    hamburger.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!hamburger.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.remove('open');
+        }
+    });
+</script>

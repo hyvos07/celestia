@@ -10,6 +10,20 @@ nav .options a:hover {
     text-decoration: underline;
 }
 
+#sidebar-toggle {
+display: none;
+}
+.sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+#sidebar-toggle:checked ~ .sidebar {
+    transform: translateX(0);
+}
+.hamburger-label {
+    cursor: pointer;
+}
+
 .use-poppins {
     font-family: 'Poppins', helvetica;
 }
@@ -27,11 +41,12 @@ nav .options a:hover {
 }
 
 @media (max-width: 768px) {
-    nav {
-        padding: 0px 15px;
-    }
     nav .options a {
         padding: 0px 0px 0px 35px;
         font-size: 12px;
+    }
+
+    .hamburger-label, .sidebar {
+        display: none;
     }
 }
