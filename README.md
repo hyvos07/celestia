@@ -30,7 +30,57 @@ If you want to try and run the project from your local device, open http://127.0
 ## Tugas 5
 ### Implementasi Desain Web menggunakan HTML, CSS dan Framework CSS
 
-yaudah
+1. Implementasi Fitur Edit dan Hapus Produk
+    *Views* dari mengedit dan menghapus produk berada pada `edit_product` dan `delete_product`.
+    ```python
+    # Edit a product entry
+    def edit_product(request, id):
+        product = Product.objects.get(pk = id) # get product by id
+
+        form = ProductForm(request.POST or None, instance=product) # create form bdsrkan instance tsb
+
+        if form.is_valid() and request.method == "POST":
+            form.save() # save
+            return HttpResponseRedirect(reverse('main:show_main')) # balik ke main page
+
+        context = {'form': form}
+        return render(request, "edit_product.html", context) # template html yang digunakan
+
+
+    # Delete a product entry
+    def delete_product(request, id):
+        product = Product.objects.get(pk = id) # get product by id
+        product.delete() # delete
+        return HttpResponseRedirect(reverse('main:show_main'))
+    ```
+
+2. Kustomisasi desain pada *template* HTML yang telah dibuat pada tugas-tugas sebelumnya
+
+    Beberapa desain dari tugas-tugas sebelumnya kebanyakan masih diimplementasikan pada tugas ini, tapi beberapa *page* yang masih memiliki desain *default* dari Django sudah diberi sedikit sentuhan CSS dan Tailwind.
+
+    Beberapa elemen di `main` *page* juga dikonversi memakai Tailwind untuk mengganti *style* CSS yang dipakai dan memangkas sebagian besar konfigurasi *style* yang ada di `main.css`.
+
+    Beberapa page yang memiliki perubahan desain adalah sebagai berikut.
+
+    - [Login Page](https://github.com/hyvos07/celestia/blob/main/main/templates/login.html)
+        ![Login](assets/assignment/Page/login.png)
+    
+
+    - [Register Page](https://github.com/hyvos07/celestia/blob/main/main/templates/register.html)
+        ![Register](assets/assignment/Page/register.png)
+
+
+    - [Main Page](https://github.com/hyvos07/celestia/blob/main/main/templates/main.html)
+        ![Main](assets/assignment/Page/main.png) ![Card](assets/assignment/Page/card.png)
+
+        
+    - [Create Product Page](https://github.com/hyvos07/celestia/blob/main/main/templates/create_product.html)
+        ![CreateProduct](assets/assignment/Page/create_product.png)
+
+    Selain itu, terdapat sebuah page tambahan baru untuk [edit produk](https://github.com/hyvos07/celestia/blob/main/main/templates/edit_product.html) di `edit_product.html` dan desain *[card](https://github.com/hyvos07/celestia/blob/main/main/templates/product_card.html)* yang digunakan untuk menampilkan produk pengguna.
+
+    ![EditProduct](assets/assignment/Page/edit_product.png)
+
 
 ### Urutan Prioritas Pengambilan CSS Selector
 
@@ -42,7 +92,7 @@ CSS memiliki prioritas pengambilan (atau *specificity*) sendiri dalam menentukan
 | 2 | **ID Selector** | *Selector* yang mengacu pada ID elemen HTML, didefinisikan dengan `#` | `#header { background-color: yellow; }` |
 | 3 | **Class Selector** | *Selector* yang mengacu pada sebuah kelas (yang kita buat) di HTML, didefinisikan dengan `.` | `.box { color: red; }` |
 | 4 | **Tag Selector** | *Selector* yang langsung mengacu pada tag HTML, seperti `h1`, `p`, atau `div` | `p { color: blue; }` |
-| 5 | **Bawaan dari Browser** | *Style* default yang dimiliki oleh *browser* yang dipakai oleh kita, misalnya teks di tag `<h1>` secara otomatis akan berukuran lebih besar daripada teks di tag `<p>` |  |
+| 5 | **Bawaan dari Browser** | *Style* default yang dimiliki oleh *browser* yang dipakai oleh kita | Teks di tag `<h1>` secara otomatis akan berukuran lebih besar daripada teks di tag `<p>` |
 
 Selain *specificity* di atas, terdapat pula *selector* yang memakai *flag* `!important`, yang akan mendahului semua prioritas lainnya. Jika terdapat dua `!important` di elemen yang sama, maka yang lebih tinggi prioritasnya di *specificity* akan lebih didahulukan.
 
@@ -83,7 +133,7 @@ Selain meningkatkan *user experience*, *responsive design* juga bisa meningkatka
 
 - **Padding**
 
-    Ruang di dalam elemen HTML, yang berada di antara *child* dari elemen tersebut dengan border. *Padding* memberikan jarak di dalam elemen, sehingga *child*-nya tidak menyentuh langsung border.
+    Ruang di dalam elemen HTML, yang berada di antara *child*/konten dari elemen tersebut dengan border. *Padding* memberikan jarak di dalam elemen, sehingga *child* atau kontennya tidak menyentuh langsung border.
     ```css
     div {
         padding: 10px;
