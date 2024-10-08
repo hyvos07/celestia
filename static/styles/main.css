@@ -16,15 +16,6 @@ footer {
     text-align: center;
 }
 
-/* Elements */
-/* .main{
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    position: relative;
-} */
-
 .not-found{
     font-family: 'Poppins', helvetica;
     font-weight: 600;

@@ -8,6 +8,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 from main.forms import ProductForm
 from main.models import Product
@@ -30,20 +33,23 @@ def register(request):
 
 # User Login
 def login_user(request):
-   if request.method == 'POST':
-      form = AuthenticationForm(data=request.POST)
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
 
-      if form.is_valid():
-        user = form.get_user()
-        login(request, user)
-        response = HttpResponseRedirect(reverse("main:show_main"))
-        response.set_cookie('last_login', str(datetime.datetime.now()))
-        return response
-
-   else:
-      form = AuthenticationForm(request)
-   context = {'form': form}
-   return render(request, 'login.html', context)
+    else:
+        form = AuthenticationForm(request)
+    
+    context = {'form': form}
+    return render(request, 'login.html', context)
 
 
 # User Logout
@@ -57,11 +63,8 @@ def logout_user(request):
 # Show the main page
 @login_required(login_url='/login')
 def show_main(request):
-    all_products = Product.objects.filter(user=request.user)
-
     context = {
         'username': request.user.username,
-        'all_products': all_products,
         'last_login': time_ago(request.COOKIES.get('last_login')),
     }
 
@@ -80,6 +83,38 @@ def create_product(request):
 
     context = {'form': form}
     return render(request, "create_product.html", context)
+
+
+# Add a product using AJAX
+@csrf_exempt
+@require_POST
+def create_product_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    description = strip_tags(request.POST.get("description"))
+    stock = strip_tags(request.POST.get("stock"))
+    chara = strip_tags(request.POST.get("chara"))
+    game = strip_tags(request.POST.get("game"))
+    category = strip_tags(request.POST.get("category"))
+    image = strip_tags(request.POST.get("image"))
+    
+    user = request.user
+
+    new_product = Product(
+        name=name,
+        price=price,
+        description=description,
+        stock=stock,
+        chara=chara,
+        game=game,
+        category=category,
+        image=image,
+        user=user
+    )
+    
+    new_product.save()
+
+    return HttpResponse(b"Successfully Created", status=201)
 
 
 # Edit a product entry
@@ -105,13 +140,13 @@ def delete_product(request, id):
 
 # Show all products in XML format
 def show_xml(request):
-    data = Product.objects.all()
+    data = Product.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 
 # Show all products in JSON format
 def show_json(request):
-    data = Product.objects.all()
+    data = Product.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 
