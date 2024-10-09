@@ -98,6 +98,10 @@ def create_product_ajax(request):
     category = strip_tags(request.POST.get("category"))
     image = strip_tags(request.POST.get("image"))
     
+    # Check if any of the fields are empty
+    if not name or not price or not description or not stock or not chara or not game or not category or not image:
+        return HttpResponse(b"Missing required fields", status=400)
+    
     user = request.user
 
     new_product = Product(

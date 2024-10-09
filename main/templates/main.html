@@ -88,6 +88,8 @@
         </div>
     </div>
 
+    <div id="error-toast" class="hidden"></div>
+
     <div class="mt-12 mb-4">
         <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-[#5038bc] hover:bg-[#45349f] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-10 use-poppins" onclick="showModal();">
             <p id="decideTextButton"></p>
@@ -216,13 +218,38 @@
         fetch("{% url 'main:create_product_ajax' %}", {
             method: "POST",
             body: new FormData(document.querySelector('#addProductForm')),
-        }).then(response => refreshAllProduct())
-
-        document.getElementById("addProductForm").reset(); 
-        // document.querySelector("[data-modal-toggle='crudModal']").click();
-        hideModal();
+        }).then(response => {
+            if (response.status === 400) {
+                showErrorToast("Failed to add product.");
+                hideModal();
+            } else {
+                refreshAllProduct();
+                document.getElementById("addProductForm").reset(); 
+                hideModal();
+            }
+        }).catch(error => {
+            showErrorToast("An error occurred. Please try again.");
+        });
 
         return false;
+    }
+
+    function showErrorToast(message) {
+        const toast = document.getElementById('error-toast');
+        toast.className = 'fixed bottom-[-100px] right-4 bg-red-500 text-white p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
+        toast.innerText = message;
+
+        toast.addEventListener('click', () => {
+            toast.className = 'hidden';
+        });
+
+        setTimeout(() => {
+            toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out';
+        }, 50);
+        
+        setTimeout(() => {
+            toast.className = 'hidden';
+        }, 2000);
     }
 
     document.getElementById("cancelButton").addEventListener("click", hideModal);
