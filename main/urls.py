@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('create-product', create_product, name='create_product'),
     path('create-product-ajax', create_product_ajax, name='create_product_ajax'),
+    path('create-mobile', create_mobile, name='create_mobile'),
     path('edit-product/<uuid:id>', edit_product, name='edit_product'),
     path('delete-product/<uuid:id>', delete_product, name='delete_product'),
     path('xml/', show_xml, name='show_xml'),

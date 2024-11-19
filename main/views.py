@@ -1,8 +1,10 @@
 import datetime
+import json
 
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core import serializers
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -119,6 +121,34 @@ def create_product_ajax(request):
     new_product.save()
 
     return HttpResponse(b"Successfully Created", status=201)
+
+
+# Add product for mobile app
+@csrf_exempt
+def create_mobile(request):
+    if request.method == 'POST':
+
+        try:
+            data = json.loads(request.body)
+            new_mood = Product.objects.create(
+                user=request.user,
+                name=data['name'],
+                price=data['price'],
+                description=data['description'],
+                stock=data['stock'],
+                chara=data['chara'],
+                game=data['game'],
+                category=data['category'],
+                image=data['image']
+            )
+
+            new_mood.save()
+        except:
+            return JsonResponse({"status": "Failed to add product"}, status=400)
+
+        return JsonResponse({"status": "Successfully added product"}, status=200)
+    else:
+        return JsonResponse({"status": "Wrong."}, status=401)
 
 
 # Edit a product entry
